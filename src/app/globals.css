@@ -25,16 +25,16 @@
   --card-hover: rgba(244, 244, 245, 0.9);
 }
 
-/* Dark mode — deep space */
+/* Dark mode — deep space navy (ref: infracorp.global #101b23) */
 [data-theme="dark"] {
-  --background: #06060e;
-  --foreground: #e8e8f0;
-  --accent: #818cf8;
-  --accent-light: #a5b4fc;
-  --muted: #a1a1aa;
+  --background: #0a1118;
+  --foreground: #e8ecf0;
+  --accent: #6ba3ff;
+  --accent-light: #93bbff;
+  --muted: #8899aa;
   --border-color: rgba(255, 255, 255, 0.06);
-  --card: rgba(15, 15, 25, 0.7);
-  --card-hover: rgba(25, 25, 40, 0.8);
+  --card: rgba(12, 20, 30, 0.7);
+  --card-hover: rgba(18, 28, 40, 0.8);
 }
 
 * {
@@ -85,6 +85,13 @@ html.lenis body {
 /* Text gradient */
 .text-gradient {
   background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="dark"] .text-gradient {
+  background: linear-gradient(135deg, #6ba3ff, #93c5ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
