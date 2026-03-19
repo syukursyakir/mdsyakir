@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { MapPin, GraduationCap, Code2 } from "lucide-react";
 import TextReveal from "./TextReveal";
 
 export default function About() {
@@ -71,7 +72,7 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Visual element - abstract shape */}
+          {/* Visual element */}
           <motion.div
             className="relative aspect-square max-w-md mx-auto lg:mx-0"
             style={{ y: imgY }}
@@ -101,7 +102,9 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 }}
                 >
-                  <span className="text-2xl">🇸🇬</span>
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-accent" />
+                  </div>
                   <div>
                     <p className="text-xs text-muted font-mono">LOCATION</p>
                     <p className="text-sm font-medium text-foreground">
@@ -117,7 +120,9 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.5 }}
                 >
-                  <span className="text-2xl">🎓</span>
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <GraduationCap className="w-4 h-4 text-accent" />
+                  </div>
                   <div>
                     <p className="text-xs text-muted font-mono">STUDYING</p>
                     <p className="text-sm font-medium text-foreground">
@@ -133,7 +138,9 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.6 }}
                 >
-                  <span className="text-2xl">💻</span>
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <Code2 className="w-4 h-4 text-accent" />
+                  </div>
                   <div>
                     <p className="text-xs text-muted font-mono">FOCUS</p>
                     <p className="text-sm font-medium text-foreground">

@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import MagneticButton from "./MagneticButton";
 
 export default function Hero() {
@@ -14,9 +15,6 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.8], [1, 0.95]);
-
-  const firstName = "MUHAMMAD";
-  const lastName = "SYAKIR";
 
   return (
     <section
@@ -66,7 +64,7 @@ export default function Hero() {
               ease: [0.16, 1, 0.3, 1],
             }}
           >
-            {firstName}
+            MUHAMMAD
           </motion.h1>
         </div>
 
@@ -111,15 +109,7 @@ export default function Hero() {
               data-cursor-text="View"
             >
               View My Work
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path d="M7 17L17 7M17 7H7M17 7v10" />
-              </svg>
+              <ArrowUpRight className="w-4 h-4" />
             </a>
           </MagneticButton>
 
@@ -146,11 +136,11 @@ export default function Hero() {
           SCROLL
         </span>
         <motion.div
-          className="w-[1px] h-8 bg-accent"
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ transformOrigin: "top" }}
-        />
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-4 h-4 text-accent" />
+        </motion.div>
       </motion.div>
     </section>
   );

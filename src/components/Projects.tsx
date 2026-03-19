@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { ArrowUpRight } from "lucide-react";
 import TextReveal from "./TextReveal";
 import MagneticButton from "./MagneticButton";
 
@@ -134,19 +135,10 @@ function ProjectCard({
         <MagneticButton>
           <a
             href={project.link}
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground group/link"
+            className="inline-flex items-center gap-2 text-sm font-medium text-foreground"
           >
             <span>View Project</span>
-            <motion.svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-              whileHover={{ x: 4 }}
-            >
-              <path d="M7 17L17 7M17 7H7M17 7v10" />
-            </motion.svg>
+            <ArrowUpRight className="w-4 h-4" />
           </a>
         </MagneticButton>
       </div>
@@ -191,15 +183,7 @@ export default function Projects() {
             viewport={{ once: true }}
           >
             View all on GitHub
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path d="M7 17L17 7M17 7H7M17 7v10" />
-            </svg>
+            <ArrowUpRight className="w-4 h-4" />
           </motion.a>
         </div>
 

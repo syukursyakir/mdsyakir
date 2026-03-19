@@ -1,121 +1,107 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
-  const [isHovering, setIsHovering] = useState(false);
-  const [hoverText, setHoverText] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-
-  const springConfig = { damping: 25, stiffness: 250, mass: 0.5 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
-
   const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+  const mouse = useRef({ x: -100, y: -100 });
+  const dot = useRef({ x: -100, y: -100 });
+  const ring = useRef({ x: -100, y: -100 });
+  const raf = useRef<number>(0);
 
   useEffect(() => {
-    // Hide on mobile
-    if (window.innerWidth < 768) return;
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+      return;
+    }
+    setIsMobile(false);
 
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const interactive = target.closest(
+    const onOver = (e: MouseEvent) => {
+      const t = (e.target as HTMLElement).closest(
         "a, button, [data-cursor-hover], input, textarea"
       );
-      if (interactive) {
-        setIsHovering(true);
-        const text = interactive.getAttribute("data-cursor-text");
-        if (text) setHoverText(text);
-      }
+      if (t) setIsHovering(true);
     };
 
-    const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const interactive = target.closest(
+    const onOut = (e: MouseEvent) => {
+      const t = (e.target as HTMLElement).closest(
         "a, button, [data-cursor-hover], input, textarea"
       );
-      if (interactive) {
-        setIsHovering(false);
-        setHoverText("");
-      }
+      if (t) setIsHovering(false);
     };
 
-    window.addEventListener("mousemove", moveCursor);
-    document.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseout", handleMouseOut);
+    // Raw RAF loop — no React state, no springs, just transforms
+    const animate = () => {
+      // Dot follows instantly
+      dot.current.x = mouse.current.x;
+      dot.current.y = mouse.current.y;
+
+      // Ring lerps behind
+      ring.current.x += (mouse.current.x - ring.current.x) * 0.15;
+      ring.current.y += (mouse.current.y - ring.current.y) * 0.15;
+
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${dot.current.x}px, ${dot.current.y}px, 0) translate(-50%, -50%)`;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      raf.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseover", onOver);
+    document.addEventListener("mouseout", onOut);
+    raf.current = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      document.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
+      cancelAnimationFrame(raf.current);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, []);
 
-  if (typeof window !== "undefined" && window.innerWidth < 768) return null;
+  if (isMobile) return null;
 
   return (
     <>
-      {/* Dot */}
-      <motion.div
+      <div
         ref={dotRef}
-        className="fixed top-0 left-0 z-[10000] pointer-events-none mix-blend-difference"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
+        className="fixed top-0 left-0 z-[10000] pointer-events-none mix-blend-difference will-change-transform"
+        style={{ transform: "translate3d(-100px, -100px, 0)" }}
       >
-        <motion.div
-          className="rounded-full bg-white"
-          animate={{
-            width: isHovering ? 80 : 8,
-            height: isHovering ? 80 : 8,
+        <div
+          className="rounded-full bg-white transition-[width,height] duration-200 ease-out"
+          style={{
+            width: isHovering ? 60 : 8,
+            height: isHovering ? 60 : 8,
           }}
-          transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        >
-          {hoverText && isHovering && (
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0 flex items-center justify-center text-black text-xs font-medium"
-            >
-              {hoverText}
-            </motion.span>
-          )}
-        </motion.div>
-      </motion.div>
-
-      {/* Outer ring */}
-      <motion.div
-        className="fixed top-0 left-0 z-[9999] pointer-events-none"
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: "-50%",
-          translateY: "-50%",
-          opacity: isVisible ? 1 : 0,
-        }}
+        />
+      </div>
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 z-[9999] pointer-events-none mix-blend-difference will-change-transform"
+        style={{ transform: "translate3d(-100px, -100px, 0)" }}
       >
-        <motion.div
-          className="rounded-full border border-white/30 mix-blend-difference"
-          animate={{
-            width: isHovering ? 0 : 40,
-            height: isHovering ? 0 : 40,
+        <div
+          className="rounded-full border border-white/40 transition-[width,height,opacity] duration-200 ease-out"
+          style={{
+            width: isHovering ? 0 : 36,
+            height: isHovering ? 0 : 36,
             opacity: isHovering ? 0 : 1,
           }}
-          transition={{ type: "spring", damping: 20, stiffness: 300 }}
         />
-      </motion.div>
+      </div>
     </>
   );
 }

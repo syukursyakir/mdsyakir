@@ -1,31 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Zap, Bot, Globe, BookOpen } from "lucide-react";
 import TextReveal from "./TextReveal";
 
 const skills = [
   {
     category: "Languages",
     items: ["Python", "HTML", "CSS", "JavaScript"],
-    icon: "⚡",
+    icon: Zap,
     span: "col-span-1 row-span-1",
   },
   {
     category: "AI & Tools",
     items: ["Claude Code", "OpenClaw", "AI/ML"],
-    icon: "🤖",
+    icon: Bot,
     span: "col-span-1 row-span-1 md:col-span-1",
   },
   {
     category: "Web Dev",
     items: ["React", "Next.js", "Tailwind CSS"],
-    icon: "🌐",
+    icon: Globe,
     span: "col-span-1 row-span-1",
   },
   {
     category: "Currently Learning",
     items: ["Applied AI", "Data Analytics", "Machine Learning"],
-    icon: "📚",
+    icon: BookOpen,
     span: "col-span-1 row-span-1 md:col-span-1",
   },
 ];
@@ -70,35 +71,40 @@ export default function Skills() {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill, i) => (
-            <motion.div
-              key={skill.category}
-              className={`bento-item ${skill.span} p-6 rounded-2xl border border-border bg-card group`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: i * 0.1,
-                duration: 0.6,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              <div className="text-3xl mb-4">{skill.icon}</div>
-              <h3 className="text-lg font-semibold text-foreground mb-3">
-                {skill.category}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {skill.items.map((item) => (
-                  <span
-                    key={item}
-                    className="px-3 py-1 text-xs font-mono rounded-full border border-border text-muted group-hover:border-accent/50 group-hover:text-foreground transition-colors duration-300"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+          {skills.map((skill, i) => {
+            const Icon = skill.icon;
+            return (
+              <motion.div
+                key={skill.category}
+                className={`bento-item ${skill.span} p-6 rounded-2xl border border-border bg-card group`}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: i * 0.1,
+                  duration: 0.6,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors duration-300">
+                  <Icon className="w-5 h-5 text-accent" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-3">
+                  {skill.category}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {skill.items.map((item) => (
+                    <span
+                      key={item}
+                      className="px-3 py-1 text-xs font-mono rounded-full border border-border text-muted group-hover:border-accent/50 group-hover:text-foreground transition-colors duration-300"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Marquee */}
