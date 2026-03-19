@@ -13,26 +13,28 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Light mode — warm sky feel */
 :root {
-  --background: #fafafa;
+  --background: #f8f6f1;
   --foreground: #0a0a0a;
   --accent: #6366f1;
   --accent-light: #818cf8;
   --muted: #71717a;
   --border-color: #e4e4e7;
-  --card: #ffffff;
-  --card-hover: #f4f4f5;
+  --card: rgba(255, 255, 255, 0.8);
+  --card-hover: rgba(244, 244, 245, 0.9);
 }
 
+/* Dark mode — deep space */
 [data-theme="dark"] {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
+  --background: #06060e;
+  --foreground: #e8e8f0;
   --accent: #818cf8;
   --accent-light: #a5b4fc;
   --muted: #a1a1aa;
-  --border-color: #27272a;
-  --card: #111111;
-  --card-hover: #1a1a1a;
+  --border-color: rgba(255, 255, 255, 0.06);
+  --card: rgba(15, 15, 25, 0.7);
+  --card-hover: rgba(25, 25, 40, 0.8);
 }
 
 * {

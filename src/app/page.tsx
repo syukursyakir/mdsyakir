@@ -13,6 +13,7 @@ import Journey from "@/components/Journey";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import SpaceBackground from "@/components/SpaceBackground";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -26,12 +27,13 @@ export default function Home() {
       <SmoothScroll>
         <div className="noise-overlay">
           <CustomCursor />
+          <SpaceBackground />
           <Loader onComplete={handleLoadComplete} />
 
           {!loading && (
             <>
               <Navbar />
-              <main>
+              <main className="relative z-[2]">
                 <Hero />
                 <div className="section-divider" />
                 <About />
