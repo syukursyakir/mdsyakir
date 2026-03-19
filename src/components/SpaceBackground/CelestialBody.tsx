@@ -1,17 +1,23 @@
 "use client";
 
 /**
- * Moon inspired by:
- *   - https://dev.to/freakyspeedster/created-a-realistic-moon-using-just-css-38c5
- *     (rotating moon texture from solarsystemscope.com + inset box-shadow for 3D)
- *   - https://www.desarrollolibre.net/blog/css/animating-things-with-css-creating-a-moon
- *     (individual crater elements with inset shadows + pulsing glow)
+ * DESIGN REFERENCES:
  *
- * Sun inspired by:
- *   - https://css-irl.info/heatwave-animated-sun-illustration/
- *     (conic-gradient rays on pseudo-elements + radial-gradient glow)
- *   - https://codepen.io/Laurie_Lou/pen/QGBpjM
- *     (rotating ray ring with gradient strips)
+ * Moon:
+ *   - solarsystemscope.com — NASA-grade moon textures, realistic lighting
+ *   - stars.chromeexperiments.com (100,000 Stars) — stellar color temperature rendering
+ *   - dev.to/freakyspeedster — rotating texture with inset box-shadow for 3D depth
+ *   - desarrollolibre.net — crater elements with inset shadows + pulsing glow
+ *
+ * Sun:
+ *   - solarsystemscope.com — radial gradient sun rendering with corona layers
+ *   - gamiable.com — additive blending glow, particle-based corona
+ *   - css-irl.info/heatwave — conic-gradient rotating rays with radial mask
+ *   - stars.chromeexperiments.com — B-V color index (3840K-42000K temperature palette)
+ *   - byhook.com/activity/exploring-the-cosmos-with-webgl — layered glow + diffraction
+ *
+ * Toggle concept:
+ *   - toggles.dev — smooth celestial body transitions
  */
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,349 +32,358 @@ export default function CelestialBody({ isDark }: { isDark: boolean }) {
   );
 }
 
-/* ============================
+/* ================================================================
    MOON
-   Technique: real NASA texture on a sphere with inset box-shadows
-   for 3D lighting + individual crater divs + pulsing glow
-   ============================ */
+   Ref: solarsystemscope.com texture + 100,000 Stars color science
+   Technique: Real 2K NASA texture with background-position animation
+   for slow rotation, multi-layer inset box-shadows for spherical
+   lighting, separate crater elements, and pulsing atmospheric glow.
+   ================================================================ */
 function Moon() {
   return (
     <motion.div
       className="relative"
-      initial={{ scale: 0, opacity: 0, y: 30 }}
-      animate={{ scale: 1, opacity: 1, y: 0 }}
-      exit={{ scale: 0, opacity: 0, y: -30 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ scale: 0, opacity: 0, y: 40, rotate: -20 }}
+      animate={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
+      exit={{ scale: 0, opacity: 0, y: -40, rotate: 20 }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Atmospheric glow — outermost ring */}
+      {/* Layer 1: Wide atmospheric glow (solarsystemscope lighting ref) */}
       <div
         className="absolute rounded-full"
         style={{
-          inset: "-60px",
-          background:
-            "radial-gradient(circle, rgba(200, 210, 255, 0.06) 0%, rgba(200, 210, 255, 0.02) 40%, transparent 70%)",
+          inset: "-80px",
+          background: `
+            radial-gradient(circle,
+              rgba(180, 200, 255, 0.07) 0%,
+              rgba(160, 185, 255, 0.03) 35%,
+              transparent 65%
+            )
+          `,
         }}
       />
 
-      {/* Main moon body — texture-based with rotating background-position */}
-      {/* Ref: dev.to/freakyspeedster — 2k_moon.jpg from solarsystemscope.com */}
+      {/* Layer 2: Close atmospheric ring */}
       <motion.div
-        className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full relative overflow-hidden"
+        className="absolute rounded-full"
+        style={{
+          inset: "-30px",
+          background: `
+            radial-gradient(circle,
+              transparent 55%,
+              rgba(200, 215, 255, 0.04) 65%,
+              rgba(180, 200, 255, 0.02) 80%,
+              transparent 90%
+            )
+          `,
+        }}
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Moon body — real NASA texture from solarsystemscope.com */}
+      <motion.div
+        className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full relative overflow-hidden"
         style={{
           backgroundImage:
             "url('https://www.solarsystemscope.com/textures/download/2k_moon.jpg')",
-          backgroundSize: "200% 100%",
+          backgroundSize: "220% 100%",
+          /* Multi-layer inset shadows (ref: dev.to/freakyspeedster)
+             Creates spherical 3D lighting with a top-left light source */
           boxShadow: [
-            // Inner highlight — top-left light source
-            "inset -10px 8px 6px -5px rgba(255, 255, 255, 0.4)",
-            // Dark shadow — bottom-right depth
-            "inset 20px -20px 50px 15px rgba(0, 0, 0, 0.85)",
-            // Outer glow — moonlight spill
-            "0 0 40px 8px rgba(200, 210, 255, 0.12)",
-            "0 0 80px 20px rgba(180, 200, 255, 0.06)",
+            // Bright highlight — light source top-left
+            "inset -12px 10px 8px -6px rgba(255, 255, 255, 0.35)",
+            // Deep shadow — opposite side darkness
+            "inset 24px -24px 60px 20px rgba(0, 0, 0, 0.88)",
+            // Rim light — thin bright edge
+            "inset -3px 2px 3px -2px rgba(255, 255, 255, 0.15)",
+            // Outer glow — moonlight spill (cool blue)
+            "0 0 30px 6px rgba(180, 200, 255, 0.10)",
+            "0 0 60px 15px rgba(160, 185, 255, 0.05)",
           ].join(", "),
         }}
         animate={{
           backgroundPosition: ["0% 0%", "100% 0%"],
         }}
         transition={{
-          duration: 60,
+          duration: 90,
           repeat: Infinity,
           ease: "linear",
         }}
-      />
+      >
+        {/* Crater overlay (ref: desarrollolibre.net technique)
+            Individual divs with inset box-shadow for depth */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            top: "12%", left: "18%",
+            width: "20%", height: "24%",
+            background: "rgba(80, 80, 80, 0.12)",
+            boxShadow: "inset 2px -2px 4px rgba(40, 40, 40, 0.2)",
+            transform: "rotate(35deg)",
+            borderRadius: "60% 40% 50% 50%",
+          }}
+        />
+        <div
+          className="absolute rounded-full"
+          style={{
+            top: "50%", right: "12%",
+            width: "14%", height: "16%",
+            background: "rgba(90, 90, 90, 0.10)",
+            boxShadow: "inset 1px -1px 3px rgba(40, 40, 40, 0.15)",
+          }}
+        />
+        <div
+          className="absolute rounded-full"
+          style={{
+            top: "35%", left: "42%",
+            width: "9%", height: "9%",
+            background: "rgba(70, 70, 70, 0.08)",
+            boxShadow: "inset 1px -1px 2px rgba(30, 30, 30, 0.12)",
+          }}
+        />
+        <div
+          className="absolute"
+          style={{
+            bottom: "15%", left: "25%",
+            width: "17%", height: "17%",
+            background: "rgba(85, 85, 85, 0.11)",
+            boxShadow: "inset 2px -1px 4px rgba(45, 45, 45, 0.18)",
+            borderRadius: "50% 50% 45% 55%",
+          }}
+        />
+        <div
+          className="absolute rounded-full"
+          style={{
+            top: "22%", right: "22%",
+            width: "7%", height: "7%",
+            background: "rgba(75, 75, 75, 0.08)",
+          }}
+        />
+        <div
+          className="absolute rounded-full"
+          style={{
+            bottom: "30%", right: "35%",
+            width: "5%", height: "5%",
+            background: "rgba(70, 70, 70, 0.06)",
+          }}
+        />
+      </motion.div>
 
-      {/* Crater overlay — ref: desarrollolibre.net crater technique */}
-      <div className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden">
-        {/* Crater 1 — large, top-left */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            top: "15%",
-            left: "20%",
-            width: "18%",
-            height: "22%",
-            background: "rgba(80, 80, 80, 0.15)",
-            boxShadow: "inset 2px -1px 0 0px rgba(60, 60, 60, 0.2)",
-            transform: "rotate(40deg)",
-          }}
-        />
-        {/* Crater 2 — medium, center-right */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            top: "55%",
-            right: "15%",
-            width: "12%",
-            height: "14%",
-            background: "rgba(90, 90, 90, 0.12)",
-            boxShadow: "inset 1px -1px 0 0px rgba(50, 50, 50, 0.15)",
-            transform: "rotate(-30deg)",
-          }}
-        />
-        {/* Crater 3 — small, center */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            top: "40%",
-            left: "45%",
-            width: "8%",
-            height: "8%",
-            background: "rgba(70, 70, 70, 0.1)",
-            boxShadow: "inset 1px -1px 0 0px rgba(50, 50, 50, 0.12)",
-          }}
-        />
-        {/* Crater 4 — large, bottom-left */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            bottom: "18%",
-            left: "30%",
-            width: "15%",
-            height: "15%",
-            background: "rgba(85, 85, 85, 0.13)",
-            boxShadow: "inset 2px -1px 0 0px rgba(55, 55, 55, 0.18)",
-          }}
-        />
-        {/* Crater 5 — tiny, top-right */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            top: "25%",
-            right: "25%",
-            width: "6%",
-            height: "6%",
-            background: "rgba(75, 75, 75, 0.1)",
-          }}
-        />
-      </div>
-
-      {/* Pulsing glow animation — ref: desarrollolibre moonPulse keyframes */}
+      {/* Pulsing glow (ref: desarrollolibre moonPulse keyframe) */}
       <motion.div
-        className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full"
+        className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full pointer-events-none"
         animate={{
           boxShadow: [
-            "0 0 60px 10px rgba(200, 210, 255, 0.08)",
-            "0 0 90px 20px rgba(200, 210, 255, 0.14)",
-            "0 0 60px 10px rgba(200, 210, 255, 0.08)",
+            "0 0 50px 8px rgba(180, 200, 255, 0.06), 0 0 100px 25px rgba(160, 185, 255, 0.03)",
+            "0 0 70px 15px rgba(180, 200, 255, 0.10), 0 0 140px 40px rgba(160, 185, 255, 0.05)",
+            "0 0 50px 8px rgba(180, 200, 255, 0.06), 0 0 100px 25px rgba(160, 185, 255, 0.03)",
           ],
         }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
     </motion.div>
   );
 }
 
-/* ============================
+/* ================================================================
    SUN
-   Technique: radial-gradient core + conic-gradient ray ring
-   + layered box-shadow glow + pulsing animation
-   Ref: css-irl.info/heatwave + codepen.io/Laurie_Lou/pen/QGBpjM
-   ============================ */
+   Ref: solarsystemscope.com radial rendering + gamiable.com
+   additive glow + css-irl.info conic-gradient rays +
+   stars.chromeexperiments.com B-V color temperature science
+   (white-hot core ~6000K, amber limb ~4000K, deep red edge ~3500K)
+
+   Technique: Multi-stop radial gradient for the photosphere,
+   dual counter-rotating conic-gradient ray rings masked with
+   radial-gradient holes, 5-layer box-shadow for corona + bloom,
+   and pulsing animation for breathing life.
+   ================================================================ */
 function Sun() {
   return (
     <motion.div
       className="relative"
-      initial={{ scale: 0, opacity: 0, y: -30 }}
-      animate={{ scale: 1, opacity: 1, y: 0 }}
-      exit={{ scale: 0, opacity: 0, y: 30 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ scale: 0, opacity: 0, y: -40, rotate: 20 }}
+      animate={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
+      exit={{ scale: 0, opacity: 0, y: 40, rotate: -20 }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Outermost warm atmospheric haze */}
+      {/* Layer 1: Ultra-wide warm haze (ref: gamiable.com atmospheric glow) */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          inset: "-80px",
-          background:
-            "radial-gradient(circle, rgba(255, 200, 50, 0.06) 0%, rgba(255, 160, 0, 0.02) 40%, transparent 65%)",
+          inset: "-100px",
+          background: `
+            radial-gradient(circle,
+              rgba(255, 200, 60, 0.08) 0%,
+              rgba(255, 160, 20, 0.04) 30%,
+              rgba(255, 120, 0, 0.015) 50%,
+              transparent 70%
+            )
+          `,
         }}
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.7, 1, 0.7],
-        }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ scale: [1, 1.12, 1], opacity: [0.8, 1, 0.8] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Rotating conic-gradient ray ring */}
-      {/* Ref: css-irl.info — conic-gradient on pseudo-element with rotation */}
+      {/* Layer 2: Ray ring 1 — conic-gradient (ref: css-irl.info heatwave)
+          16 rays with radial mask to cut out center */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          inset: "-50px",
-          background: `conic-gradient(
+          inset: "-55px",
+          background: `repeating-conic-gradient(
             from 0deg,
-            transparent 0deg,
-            rgba(255, 200, 60, 0.12) 4deg,
-            transparent 8deg,
-            transparent 22deg,
-            rgba(255, 180, 40, 0.08) 26deg,
-            transparent 30deg,
-            transparent 44deg,
-            rgba(255, 200, 60, 0.10) 48deg,
-            transparent 52deg,
-            transparent 66deg,
-            rgba(255, 180, 40, 0.08) 70deg,
-            transparent 74deg,
-            transparent 88deg,
-            rgba(255, 200, 60, 0.12) 92deg,
-            transparent 96deg,
-            transparent 110deg,
-            rgba(255, 180, 40, 0.08) 114deg,
-            transparent 118deg,
-            transparent 132deg,
-            rgba(255, 200, 60, 0.10) 136deg,
-            transparent 140deg,
-            transparent 154deg,
-            rgba(255, 180, 40, 0.08) 158deg,
-            transparent 162deg,
-            transparent 176deg,
-            rgba(255, 200, 60, 0.12) 180deg,
-            transparent 184deg,
-            transparent 198deg,
-            rgba(255, 180, 40, 0.08) 202deg,
-            transparent 206deg,
-            transparent 220deg,
-            rgba(255, 200, 60, 0.10) 224deg,
-            transparent 228deg,
-            transparent 242deg,
-            rgba(255, 180, 40, 0.08) 246deg,
-            transparent 250deg,
-            transparent 264deg,
-            rgba(255, 200, 60, 0.12) 268deg,
-            transparent 272deg,
-            transparent 286deg,
-            rgba(255, 180, 40, 0.08) 290deg,
-            transparent 294deg,
-            transparent 308deg,
-            rgba(255, 200, 60, 0.10) 312deg,
-            transparent 316deg,
-            transparent 330deg,
-            rgba(255, 180, 40, 0.08) 334deg,
-            transparent 338deg,
-            transparent 352deg,
-            rgba(255, 200, 60, 0.12) 356deg,
-            transparent 360deg
+            rgba(255, 200, 60, 0.10) 0deg 3deg,
+            transparent 3deg 22.5deg
           )`,
-          maskImage: "radial-gradient(circle, transparent 35%, black 45%, black 70%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(circle, transparent 35%, black 45%, black 70%, transparent 80%)",
+          maskImage:
+            "radial-gradient(circle, transparent 32%, black 42%, black 68%, transparent 78%)",
+          WebkitMaskImage:
+            "radial-gradient(circle, transparent 32%, black 42%, black 68%, transparent 78%)",
+          filter: "blur(1px)",
         }}
         animate={{ rotate: 360 }}
-        transition={{
-          duration: 60,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Second ray ring — counter-rotating, different phase */}
+      {/* Layer 3: Ray ring 2 — counter-rotating, offset phase */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          inset: "-40px",
-          background: `conic-gradient(
-            from 15deg,
-            transparent 0deg,
-            rgba(255, 220, 80, 0.06) 6deg,
-            transparent 12deg,
-            transparent 36deg,
-            rgba(255, 200, 60, 0.05) 42deg,
-            transparent 48deg,
-            transparent 72deg,
-            rgba(255, 220, 80, 0.06) 78deg,
-            transparent 84deg,
-            transparent 108deg,
-            rgba(255, 200, 60, 0.05) 114deg,
-            transparent 120deg,
-            transparent 144deg,
-            rgba(255, 220, 80, 0.06) 150deg,
-            transparent 156deg,
-            transparent 180deg,
-            rgba(255, 200, 60, 0.05) 186deg,
-            transparent 192deg,
-            transparent 216deg,
-            rgba(255, 220, 80, 0.06) 222deg,
-            transparent 228deg,
-            transparent 252deg,
-            rgba(255, 200, 60, 0.05) 258deg,
-            transparent 264deg,
-            transparent 288deg,
-            rgba(255, 220, 80, 0.06) 294deg,
-            transparent 300deg,
-            transparent 324deg,
-            rgba(255, 200, 60, 0.05) 330deg,
-            transparent 336deg,
-            transparent 360deg
+          inset: "-45px",
+          background: `repeating-conic-gradient(
+            from 11.25deg,
+            rgba(255, 220, 80, 0.06) 0deg 2deg,
+            transparent 2deg 22.5deg
           )`,
-          maskImage: "radial-gradient(circle, transparent 40%, black 50%, black 65%, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(circle, transparent 40%, black 50%, black 65%, transparent 75%)",
+          maskImage:
+            "radial-gradient(circle, transparent 38%, black 48%, black 62%, transparent 72%)",
+          WebkitMaskImage:
+            "radial-gradient(circle, transparent 38%, black 48%, black 62%, transparent 72%)",
+          filter: "blur(0.5px)",
         }}
         animate={{ rotate: -360 }}
-        transition={{
-          duration: 45,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Sun core — radial gradient from white-hot center to amber edge */}
-      <div
-        className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full relative"
+      {/* Layer 4: Inner corona glow ring */}
+      <motion.div
+        className="absolute rounded-full"
         style={{
-          background: `radial-gradient(
-            circle at 38% 38%,
-            #fffde7 0%,
-            #fff9c4 15%,
-            #ffee58 30%,
-            #ffca28 50%,
-            #ffb300 70%,
-            #ff8f00 90%,
-            #e65100 100%
-          )`,
+          inset: "-20px",
+          background: `
+            radial-gradient(circle,
+              transparent 50%,
+              rgba(255, 200, 80, 0.08) 60%,
+              rgba(255, 160, 40, 0.04) 75%,
+              transparent 85%
+            )
+          `,
+        }}
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Sun photosphere (ref: solarsystemscope.com + B-V color index)
+          White-hot center (~6500K) -> yellow (~5800K) -> amber (~4500K) -> deep orange edge */}
+      <div
+        className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full relative overflow-hidden"
+        style={{
+          background: `
+            radial-gradient(
+              circle at 36% 36%,
+              #fffff0 0%,
+              #fffde0 8%,
+              #fff9c4 18%,
+              #ffee58 30%,
+              #fdd835 42%,
+              #ffca28 55%,
+              #ffb300 68%,
+              #ff8f00 80%,
+              #ef6c00 92%,
+              #e65100 100%
+            )
+          `,
           boxShadow: [
-            // Core glow — tight, intense
-            "0 0 20px 5px rgba(255, 200, 50, 0.5)",
-            // Mid glow — warm spread
-            "0 0 50px 15px rgba(255, 170, 0, 0.3)",
-            // Wide glow — atmospheric
-            "0 0 100px 35px rgba(255, 140, 0, 0.15)",
-            // Ultra-wide — faint ambient
-            "0 0 160px 60px rgba(255, 120, 0, 0.06)",
+            // Tight core glow
+            "0 0 15px 4px rgba(255, 220, 80, 0.6)",
+            // Inner corona
+            "0 0 35px 10px rgba(255, 180, 40, 0.4)",
+            // Mid corona
+            "0 0 70px 25px rgba(255, 150, 0, 0.2)",
+            // Outer corona
+            "0 0 120px 45px rgba(255, 120, 0, 0.10)",
+            // Atmospheric bloom
+            "0 0 200px 80px rgba(255, 100, 0, 0.04)",
           ].join(", "),
         }}
       >
-        {/* Hot spot — white-hot highlight */}
+        {/* Hot spot — specular highlight (ref: solarsystemscope.com sun rendering) */}
         <div
           className="absolute rounded-full"
           style={{
-            top: "15%",
-            left: "15%",
-            width: "35%",
-            height: "35%",
-            background:
-              "radial-gradient(circle, rgba(255, 255, 240, 0.7) 0%, rgba(255, 255, 200, 0.2) 50%, transparent 70%)",
+            top: "10%",
+            left: "10%",
+            width: "40%",
+            height: "40%",
+            background: `
+              radial-gradient(circle at 45% 45%,
+                rgba(255, 255, 250, 0.8) 0%,
+                rgba(255, 255, 230, 0.4) 30%,
+                rgba(255, 255, 200, 0.1) 60%,
+                transparent 80%
+              )
+            `,
+          }}
+        />
+
+        {/* Surface granulation — subtle noise texture (ref: solarsystemscope.com) */}
+        <motion.div
+          className="absolute inset-0 rounded-full opacity-[0.06]"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 35%, rgba(200, 100, 0, 0.4) 0%, transparent 3%),
+              radial-gradient(circle at 60% 25%, rgba(180, 80, 0, 0.3) 0%, transparent 2%),
+              radial-gradient(circle at 45% 60%, rgba(190, 90, 0, 0.35) 0%, transparent 4%),
+              radial-gradient(circle at 75% 55%, rgba(200, 100, 0, 0.3) 0%, transparent 2%),
+              radial-gradient(circle at 30% 70%, rgba(170, 80, 0, 0.25) 0%, transparent 3%),
+              radial-gradient(circle at 55% 80%, rgba(185, 85, 0, 0.3) 0%, transparent 2%),
+              radial-gradient(circle at 80% 35%, rgba(195, 95, 0, 0.3) 0%, transparent 3%),
+              radial-gradient(circle at 15% 55%, rgba(175, 75, 0, 0.25) 0%, transparent 2%)
+            `,
+          }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 200, repeat: Infinity, ease: "linear" }}
+        />
+
+        {/* Limb darkening overlay — darker edges for realism */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: `
+              radial-gradient(circle at 40% 40%,
+                transparent 0%,
+                transparent 40%,
+                rgba(180, 80, 0, 0.08) 65%,
+                rgba(120, 40, 0, 0.15) 85%,
+                rgba(80, 20, 0, 0.2) 100%
+              )
+            `,
           }}
         />
       </div>
 
-      {/* Pulsing glow — ref: desarrollolibre moonPulse adapted for sun */}
+      {/* Pulsing corona (ref: desarrollolibre adapted for sun) */}
       <motion.div
-        className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full"
+        className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full pointer-events-none"
         animate={{
           boxShadow: [
-            "0 0 40px 10px rgba(255, 180, 0, 0.25), 0 0 80px 30px rgba(255, 150, 0, 0.12)",
-            "0 0 60px 18px rgba(255, 180, 0, 0.35), 0 0 120px 50px rgba(255, 150, 0, 0.18)",
-            "0 0 40px 10px rgba(255, 180, 0, 0.25), 0 0 80px 30px rgba(255, 150, 0, 0.12)",
+            "0 0 30px 8px rgba(255, 200, 60, 0.3), 0 0 60px 20px rgba(255, 150, 0, 0.15), 0 0 100px 40px rgba(255, 120, 0, 0.06)",
+            "0 0 45px 14px rgba(255, 200, 60, 0.4), 0 0 90px 35px rgba(255, 150, 0, 0.2), 0 0 150px 60px rgba(255, 120, 0, 0.08)",
+            "0 0 30px 8px rgba(255, 200, 60, 0.3), 0 0 60px 20px rgba(255, 150, 0, 0.15), 0 0 100px 40px rgba(255, 120, 0, 0.06)",
           ],
         }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
     </motion.div>
   );
