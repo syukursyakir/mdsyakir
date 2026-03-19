@@ -107,19 +107,6 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Marquee */}
-        <div className="mt-16 overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...techMarquee, ...techMarquee].map((tech, i) => (
-              <span
-                key={i}
-                className="mx-8 text-6xl md:text-8xl font-bold text-foreground/[0.03] select-none"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

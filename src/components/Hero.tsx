@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import MagneticButton from "./MagneticButton";
+import TextScramble from "./TextScramble";
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -36,9 +37,13 @@ export default function Hero() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
           </span>
-          <span className="text-xs md:text-sm text-muted font-mono">
+          <TextScramble
+            className="text-xs md:text-sm text-muted"
+            delay={2600}
+            speed={25}
+          >
             Available for opportunities
-          </span>
+          </TextScramble>
         </motion.div>
 
         {/* Name - first line */}
@@ -73,16 +78,21 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-base md:text-xl text-muted max-w-lg mx-auto mb-12 font-light"
+        {/* Subtitle with scramble effect */}
+        <motion.div
+          className="max-w-lg mx-auto mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 3.2, duration: 0.8 }}
         >
-          Developer & AI Student building the future,{" "}
-          <span className="text-foreground">one line of code at a time.</span>
-        </motion.p>
+          <TextScramble
+            className="text-sm md:text-base text-muted tracking-wider"
+            delay={3200}
+            speed={20}
+          >
+            DEVELOPER // AI STUDENT // SINGAPORE
+          </TextScramble>
+        </motion.div>
 
         {/* CTA Buttons */}
         <motion.div

@@ -14,6 +14,7 @@ import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SpaceBackground from "@/components/SpaceBackground";
+import ScrollVelocityText from "@/components/ScrollVelocityText";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,17 @@ export default function Home() {
                 <Hero />
                 <div className="section-divider" />
                 <About />
-                <div className="section-divider" />
+
+                {/* Scroll-velocity marquee — speeds up as you scroll */}
+                <div className="py-8 overflow-hidden">
+                  <ScrollVelocityText baseVelocity={-2}>
+                    DEVELOPER &mdash; AI STUDENT &mdash; SINGAPORE &mdash; CLAUDE CODE &mdash; OPENCLAW &mdash;&nbsp;
+                  </ScrollVelocityText>
+                  <ScrollVelocityText baseVelocity={2}>
+                    PYTHON &mdash; REACT &mdash; NEXT.JS &mdash; TAILWIND &mdash; FRAMER MOTION &mdash;&nbsp;
+                  </ScrollVelocityText>
+                </div>
+
                 <Skills />
                 <div className="section-divider" />
                 <Journey />
