@@ -5,39 +5,42 @@ import FadeIn from "./FadeIn";
 const SERVICES = [
   {
     number: "01",
-    name: "3D Modeling",
+    name: "Web Development",
     description:
-      "Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.",
+      "Building modern, responsive web applications with React, Next.js, and Tailwind CSS — from concept to deployment with clean code and smooth animations.",
   },
   {
     number: "02",
-    name: "Rendering",
+    name: "AI & Machine Learning",
     description:
-      "High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.",
+      "Developing intelligent solutions using Python, machine learning models, and data analytics to solve real-world problems and automate workflows.",
   },
   {
     number: "03",
-    name: "Motion Design",
+    name: "UI/UX Design",
     description:
-      "Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.",
+      "Designing intuitive, visually striking interfaces that balance aesthetics with usability — creating digital experiences users remember.",
   },
   {
     number: "04",
-    name: "Branding",
+    name: "Automation & Tools",
     description:
-      "Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence.",
+      "Building custom workflows, CLI tools, and automation pipelines with Claude Code and OpenClaw to supercharge development productivity.",
   },
   {
     number: "05",
-    name: "Web Design",
+    name: "Data Analytics",
     description:
-      "Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.",
+      "Transforming raw data into actionable insights through analysis, visualization, and machine learning — helping make smarter, data-driven decisions.",
   },
 ];
 
 export default function ServicesSection() {
   return (
-    <section className="bg-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32">
+    <section
+      id="services"
+      className="bg-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+    >
       <h2
         className="text-[#0C0C0C] font-black uppercase text-center mb-16 sm:mb-20 md:mb-28"
         style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
@@ -55,7 +58,8 @@ export default function ServicesSection() {
                   i < SERVICES.length - 1
                     ? "1px solid rgba(12, 12, 12, 0.15)"
                     : undefined,
-                borderTop: i === 0 ? "1px solid rgba(12, 12, 12, 0.15)" : undefined,
+                borderTop:
+                  i === 0 ? "1px solid rgba(12, 12, 12, 0.15)" : undefined,
               }}
             >
               <span

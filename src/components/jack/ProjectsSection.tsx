@@ -9,8 +9,9 @@ import LiveProjectButton from "./LiveProjectButton";
 const PROJECTS = [
   {
     number: "01",
-    category: "Client",
-    name: "Nextlevel Studio",
+    category: "Personal",
+    name: "Portfolio Website",
+    link: "https://mdsyakir.com",
     images: {
       col1Top:
         "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85",
@@ -21,8 +22,9 @@ const PROJECTS = [
   },
   {
     number: "02",
-    category: "Personal",
-    name: "Aura Brand Identity",
+    category: "Academic",
+    name: "AI & Analytics",
+    link: "https://github.com/syukursyakir",
     images: {
       col1Top:
         "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85",
@@ -33,8 +35,9 @@ const PROJECTS = [
   },
   {
     number: "03",
-    category: "Client",
-    name: "Solaris Digital",
+    category: "Personal",
+    name: "Claude Code Workflows",
+    link: "https://github.com/syukursyakir",
     images: {
       col1Top:
         "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85",
@@ -92,7 +95,9 @@ function ProjectCard({
               </h3>
             </div>
           </div>
-          <LiveProjectButton />
+          <a href={project.link} target="_blank" rel="noopener noreferrer">
+            <LiveProjectButton />
+          </a>
         </div>
 
         <div className="flex gap-3 sm:gap-4">
@@ -125,13 +130,16 @@ function ProjectCard({
 
 export default function ProjectsSection() {
   return (
-    <section className="bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-10 px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32">
+    <section
+      id="projects"
+      className="bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 relative z-10 px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+    >
       <FadeIn delay={0} y={40}>
         <h2
           className="hero-heading font-black uppercase text-center leading-none tracking-tight mb-16 sm:mb-20 md:mb-28"
           style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
         >
-          Project
+          Projects
         </h2>
       </FadeIn>
 

@@ -8,9 +8,27 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "Jack -- 3D Creator",
+  title: "Muhammad Syakir — Developer & AI Student",
   description:
-    "3D Creator portfolio — branding, web design, and unforgettable digital experiences.",
+    "Developer & AI Student from Singapore, building at the intersection of AI and web development.",
+  keywords: [
+    "Muhammad Syakir",
+    "developer",
+    "portfolio",
+    "Singapore",
+    "AI",
+    "web development",
+    "Singapore Polytechnic",
+  ],
+  authors: [{ name: "Muhammad Syakir" }],
+  openGraph: {
+    title: "Muhammad Syakir — Developer & AI Student",
+    description:
+      "Developer & AI Student building the future, one line of code at a time.",
+    url: "https://mdsyakir.com",
+    siteName: "mdsyakir",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

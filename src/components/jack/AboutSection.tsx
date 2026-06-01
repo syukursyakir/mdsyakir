@@ -38,7 +38,10 @@ const DECORATIONS = [
 
 export default function AboutSection() {
   return (
-    <section className="min-h-screen relative flex items-center justify-center px-5 sm:px-8 md:px-10 py-20">
+    <section
+      id="about"
+      className="min-h-screen relative flex items-center justify-center px-5 sm:px-8 md:px-10 py-20"
+    >
       {DECORATIONS.map((dec) => (
         <FadeIn
           key={dec.alt}
@@ -64,7 +67,7 @@ export default function AboutSection() {
           </FadeIn>
 
           <AnimatedText
-            text="With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!"
+            text="Hey, i'm Muhammad Syakir — a developer and AI student from Singapore currently pursuing my Diploma in Applied AI & Analytics at Singapore Polytechnic. I dive deep into web development, Python, and AI, building things that push boundaries. Skilled with Claude Code and OpenClaw, i love exploring where AI meets development. Let's build something incredible together!"
             className="text-[#D7E2EA] font-medium text-center leading-relaxed max-w-[560px]"
             style={{ fontSize: "clamp(1rem, 2vw, 1.35rem)" }}
           />
