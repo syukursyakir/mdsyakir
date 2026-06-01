@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import FadeIn from "./FadeIn";
 
 const SERVICES = [
@@ -52,35 +53,36 @@ export default function ServicesSection() {
         {SERVICES.map((service, i) => (
           <FadeIn key={service.number} delay={i * 0.1} y={30}>
             <div
-              className="flex items-start gap-6 sm:gap-8 md:gap-12 py-8 sm:py-10 md:py-12"
+              className="service-item group cursor-pointer py-8 sm:py-10 md:py-12"
               style={{
-                borderBottom:
-                  i < SERVICES.length - 1
-                    ? "1px solid rgba(12, 12, 12, 0.15)"
-                    : undefined,
                 borderTop:
-                  i === 0 ? "1px solid rgba(12, 12, 12, 0.15)" : undefined,
+                  i === 0 ? "1px solid rgba(12, 12, 12, 0.12)" : undefined,
               }}
             >
-              <span
-                className="font-black text-[#0C0C0C] flex-shrink-0 leading-none"
-                style={{ fontSize: "clamp(3rem, 10vw, 140px)" }}
-              >
-                {service.number}
-              </span>
-              <div className="flex flex-col gap-2 pt-2 sm:pt-4">
-                <h3
-                  className="font-medium uppercase text-[#0C0C0C]"
-                  style={{ fontSize: "clamp(1rem, 2.2vw, 2.1rem)" }}
+              <div className="flex items-start gap-6 sm:gap-8 md:gap-12 group-hover:translate-x-2 transition-transform duration-500">
+                <span
+                  className="font-black text-[#0C0C0C] flex-shrink-0 leading-none group-hover:opacity-30 transition-opacity duration-500"
+                  style={{ fontSize: "clamp(3rem, 10vw, 140px)" }}
                 >
-                  {service.name}
-                </h3>
-                <p
-                  className="font-light leading-relaxed max-w-2xl text-[#0C0C0C] opacity-60"
-                  style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.25rem)" }}
-                >
-                  {service.description}
-                </p>
+                  {service.number}
+                </span>
+                <div className="flex flex-col gap-2 pt-2 sm:pt-4">
+                  <div className="flex items-center gap-3">
+                    <h3
+                      className="font-medium uppercase text-[#0C0C0C] transition-colors duration-300"
+                      style={{ fontSize: "clamp(1rem, 2.2vw, 2.1rem)" }}
+                    >
+                      {service.name}
+                    </h3>
+                    <ArrowUpRight className="w-5 h-5 text-[#C9A96E] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  </div>
+                  <p
+                    className="font-light leading-relaxed max-w-2xl text-[#0C0C0C] opacity-60"
+                    style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.25rem)" }}
+                  >
+                    {service.description}
+                  </p>
+                </div>
               </div>
             </div>
           </FadeIn>

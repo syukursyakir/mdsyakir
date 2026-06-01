@@ -69,7 +69,7 @@ function ProjectCard({
   return (
     <div ref={containerRef} className="h-[85vh]">
       <motion.div
-        className="sticky rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 origin-top"
+        className="sticky rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA]/80 bg-[#0C0C0C] p-4 sm:p-6 md:p-8 origin-top transition-all duration-500 hover:border-[#C9A96E]/40 hover:shadow-[0_0_80px_-20px_rgba(201,169,110,0.12)]"
         style={{
           scale,
           top: `${96 + index * 28}px`,
@@ -78,7 +78,7 @@ function ProjectCard({
         <div className="flex items-start justify-between mb-4 sm:mb-6 md:mb-8 flex-wrap gap-4">
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
             <span
-              className="font-black text-[#D7E2EA] leading-none"
+              className="hero-heading font-black leading-none"
               style={{ fontSize: "clamp(3rem, 10vw, 140px)" }}
             >
               {project.number}
@@ -102,24 +102,28 @@ function ProjectCard({
 
         <div className="flex gap-3 sm:gap-4">
           <div className="w-[40%] flex flex-col gap-3 sm:gap-4">
-            <img
-              src={project.images.col1Top}
-              alt=""
-              className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] object-cover"
-              style={{ height: "clamp(130px, 16vw, 230px)" }}
-            />
-            <img
-              src={project.images.col1Bottom}
-              alt=""
-              className="w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] object-cover"
-              style={{ height: "clamp(160px, 22vw, 340px)" }}
-            />
+            <div className="overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px]">
+              <img
+                src={project.images.col1Top}
+                alt=""
+                className="w-full object-cover hover:scale-105 transition-transform duration-700"
+                style={{ height: "clamp(130px, 16vw, 230px)" }}
+              />
+            </div>
+            <div className="overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px]">
+              <img
+                src={project.images.col1Bottom}
+                alt=""
+                className="w-full object-cover hover:scale-105 transition-transform duration-700"
+                style={{ height: "clamp(160px, 22vw, 340px)" }}
+              />
+            </div>
           </div>
-          <div className="w-[60%]">
+          <div className="w-[60%] overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px]">
             <img
               src={project.images.col2}
               alt=""
-              className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] object-cover"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
           </div>
         </div>

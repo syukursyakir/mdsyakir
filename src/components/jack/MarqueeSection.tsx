@@ -29,9 +29,47 @@ const IMAGES = [
 
 const ROW1 = IMAGES.slice(0, 11);
 const ROW2 = IMAGES.slice(11);
-
 const TRIPLED_ROW1 = [...ROW1, ...ROW1, ...ROW1];
 const TRIPLED_ROW2 = [...ROW2, ...ROW2, ...ROW2];
+
+function MarqueeRow({
+  images,
+  offset,
+  direction,
+}: {
+  images: string[];
+  offset: number;
+  direction: 1 | -1;
+}) {
+  const tx = direction === 1 ? offset - 200 : -(offset - 200);
+
+  return (
+    <div className="relative">
+      <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 md:w-48 bg-gradient-to-r from-[#0C0C0C] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 md:w-48 bg-gradient-to-l from-[#0C0C0C] to-transparent z-10 pointer-events-none" />
+      <div className="overflow-hidden">
+        <div
+          className="flex gap-4"
+          style={{ transform: `translateX(${tx}px)`, willChange: "transform" }}
+        >
+          {images.map((src, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 overflow-hidden rounded-2xl"
+            >
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                className="w-[420px] h-[270px] object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function MarqueeSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -40,9 +78,9 @@ export default function MarqueeSection() {
   const handleScroll = useCallback(() => {
     if (!sectionRef.current) return;
     const sectionTop = sectionRef.current.offsetTop;
-    const scrollOffset =
-      (window.scrollY - sectionTop + window.innerHeight) * 0.3;
-    setOffset(scrollOffset);
+    setOffset(
+      (window.scrollY - sectionTop + window.innerHeight) * 0.3
+    );
   }, []);
 
   useEffect(() => {
@@ -56,46 +94,9 @@ export default function MarqueeSection() {
       ref={sectionRef}
       className="bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-10"
     >
-      <div className="flex flex-col gap-3">
-        <div className="overflow-hidden">
-          <div
-            className="flex gap-3"
-            style={{
-              transform: `translateX(${offset - 200}px)`,
-              willChange: "transform",
-            }}
-          >
-            {TRIPLED_ROW1.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt=""
-                loading="lazy"
-                className="w-[420px] h-[270px] rounded-2xl object-cover flex-shrink-0"
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="overflow-hidden">
-          <div
-            className="flex gap-3"
-            style={{
-              transform: `translateX(${-(offset - 200)}px)`,
-              willChange: "transform",
-            }}
-          >
-            {TRIPLED_ROW2.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt=""
-                loading="lazy"
-                className="w-[420px] h-[270px] rounded-2xl object-cover flex-shrink-0"
-              />
-            ))}
-          </div>
-        </div>
+      <div className="flex flex-col gap-4">
+        <MarqueeRow images={TRIPLED_ROW1} offset={offset} direction={1} />
+        <MarqueeRow images={TRIPLED_ROW2} offset={offset} direction={-1} />
       </div>
     </section>
   );
